@@ -1,0 +1,38 @@
+{
+  "name": "leadsquared-automation-assignment",
+  "version": "1.0.0",
+  "description": "Playwright TypeScript E2E Testing Assignment for LeadSquared",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test --workers=1 && npx playwright show-report --port=9323",
+    "test:headed": "npx playwright test --headed --workers=1 && npx playwright show-report --port=9323", 
+    "test:debug": "npx playwright test --debug",
+    "test:ui": "npx playwright test --ui",
+    "test:single": "npx playwright test --workers=1",
+    "test:login": "npx playwright test tests/login.spec.ts --workers=1 && npx playwright show-report",
+    "test:operations": "npx playwright test tests/user-operations.spec.ts --workers=1 && npx playwright show-report",
+    "test:search": "npx playwright test tests/search-filter.spec.ts --workers=1 && npx playwright show-report",
+    "test:all-with-report": "npx playwright test --workers=1 && npx playwright show-report --port=9323",
+    "report": "npx playwright show-report --port=9323",
+    "install:browsers": "npx playwright install",
+    "clean": "rm -rf test-results screenshots playwright-report",
+    "setup": "npm install && npx playwright install",
+    "test:complete": "npm run clean && npx playwright test --workers=1 && npx playwright show-report --port=9323",
+    "test:pass-all": "npx playwright test --workers=1 --retries=0 && npx playwright show-report --port=9323"
+  },
+  "keywords": [
+    "playwright",
+    "typescript", 
+    "automation",
+    "testing",
+    "e2e"
+  ],
+  "author": "Priyanka",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "dotenv": "^16.3.0"
+  }
+}
