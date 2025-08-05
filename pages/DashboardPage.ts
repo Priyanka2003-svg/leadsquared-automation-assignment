@@ -11,26 +11,26 @@ export class DashboardPage {
   constructor(page: Page) {
     this.page = page;
     this.profileLink = page.locator('text=Profile');
-    this.logoutButton = page.locator('#submit'); // Logout button
+    this.logoutButton = page.locator('#submit');
     this.welcomeMessage = page.locator('.main-header');
     this.navigationMenu = page.locator('.left-pannel');
     this.userInfo = page.locator('#userName-value');
   }
 
   async waitForDashboardLoad() {
-    console.log('⏳ Waiting for dashboard to load...');
+    console.log(' Waiting for dashboard to load...');
     
-    // Wait for any of these elements to indicate successful login
+    
     try {
       await Promise.race([
         expect(this.profileLink).toBeVisible({ timeout: 10000 }),
         expect(this.welcomeMessage).toBeVisible({ timeout: 10000 }),
         expect(this.navigationMenu).toBeVisible({ timeout: 10000 })
       ]);
-      console.log('✅ Dashboard loaded successfully');
+      console.log(' Dashboard loaded successfully');
       return true;
     } catch (error) {
-      console.log('❌ Dashboard load failed or login unsuccessful');
+      console.log(' Dashboard load failed or login unsuccessful');
       return false;
     }
   }
@@ -44,7 +44,7 @@ export class DashboardPage {
       fullPage: true 
     });
     
-    console.log(`📸 Screenshot saved: ${screenshotPath}`);
+    console.log(` Screenshot saved: ${screenshotPath}`);
     return screenshotPath;
   }
 
@@ -58,19 +58,19 @@ export class DashboardPage {
   }
 
   async logout() {
-    console.log('🚪 Logging out...');
+    console.log(' Logging out...');
     
     try {
       await this.logoutButton.click();
       await this.page.waitForURL('**/login', { timeout: 5000 });
-      console.log('✅ Logout successful');
+      console.log(' Logout successful');
     } catch (error) {
-      console.log('⚠️ Logout may have failed or redirect not detected');
+      console.log(' Logout may have failed or redirect not detected');
     }
   }
 
   async verifyDashboardElements() {
-    console.log('🔍 Verifying dashboard elements...');
+    console.log(' Verifying dashboard elements...');
     
     const checks = {
       profileVisible: false,

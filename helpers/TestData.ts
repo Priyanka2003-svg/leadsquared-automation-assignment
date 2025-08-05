@@ -9,8 +9,8 @@ export class TestData {
       firstName: `John${timestamp}`,
       lastName: `Doe${randomNum}`,
       email: `john.doe${timestamp}${randomNum}@test.com`,
-      age: `${25 + Math.floor(Math.random() * 15)}`, // Age between 25-40
-      salary: `${40000 + Math.floor(Math.random() * 60000)}`, // Salary between 40k-100k
+      age: `${25 + Math.floor(Math.random() * 15)}`, 
+      salary: `${40000 + Math.floor(Math.random() * 60000)}`, 
       department: this.getRandomDepartment()
     };
   }
@@ -22,20 +22,18 @@ export class TestData {
     return {
       firstName: `Jane${timestamp}`,
       lastName: `Smith${randomNum}`,
-      salary: `${50000 + Math.floor(Math.random() * 50000)}`, // Updated salary
+      salary: `${50000 + Math.floor(Math.random() * 50000)}`, 
       department: this.getRandomDepartment()
     };
   }
 
   static getLoginCredentials() {
-    // For DemoQA testing - these might work or might not, depending on the site
     const credentials = [
       { username: 'testuser', password: 'Test@123' },
       { username: 'demouser', password: 'Demo@123' },
       { username: 'user123', password: 'Password@123' }
     ];
     
-    // Return a random credential set, or use environment variables if available
     return {
       username: process.env.USERNAME || credentials[0].username,
       password: process.env.PASSWORD || credentials[0].password
@@ -78,7 +76,6 @@ export class TestData {
   }
 
   static getTestUserForSearch(): UserData {
-    // Create a user specifically designed for search testing
     return {
       firstName: 'SearchTest',
       lastName: 'User',

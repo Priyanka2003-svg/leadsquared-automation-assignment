@@ -45,7 +45,7 @@ export class WebTablesPage {
   }
 
   async navigateToWebTables() {
-    console.log('🌐 Navigating to WebTables...');
+    console.log(' Navigating to WebTables...');
     
     try {
       await this.page.goto('https://demoqa.com/webtables', { 
@@ -53,48 +53,43 @@ export class WebTablesPage {
         timeout: 20000 
       });
       
-      // Wait for critical elements - reduced timeout and parallel waiting
       await Promise.all([
         this.addButton.waitFor({ state: 'visible', timeout: 8000 }).catch(() => {}),
         this.searchBox.waitFor({ state: 'visible', timeout: 8000 }).catch(() => {}),
         this.userTable.waitFor({ state: 'visible', timeout: 8000 }).catch(() => {})
       ]);
       
-      console.log('✅ WebTables page loaded successfully');
-      await this.page.waitForTimeout(1000); // Reduced from 3000ms
+      console.log(' WebTables page loaded successfully');
+      await this.page.waitForTimeout(1000); 
       return true;
         
     } catch (error) {
-      console.log('❌ Navigation failed, but continuing...');
+      console.log(' Navigation failed, but continuing...');
       return false;
     }
   }
 
   async addNewUser(userData: UserData): Promise<boolean> {
-    console.log(`➕ Adding new user: ${userData.firstName} ${userData.lastName}`);
+    console.log(`Adding new user: ${userData.firstName} ${userData.lastName}`);
     
     try {
-      // Reduced wait time
       await this.page.waitForTimeout(500);
       
-      // Click add button with shorter timeout
       await this.addButton.waitFor({ state: 'visible', timeout: 8000 });
       await this.addButton.click();
-      console.log('🔘 Add button clicked');
+      console.log(' Add button clicked');
       
-      // Wait for modal - simplified approach
+   
       try {
         await this.modalForm.waitFor({ state: 'visible', timeout: 5000 });
-        console.log('📝 Modal form opened');
+        console.log(' Modal form opened');
       } catch {
-        console.log('⚠️ Modal might not have opened, continuing...');
+        console.log(' Modal might not have opened, continuing...');
         return true;
       }
       
-      // Reduced modal load wait
       await this.page.waitForTimeout(500);
       
-      // Fill form fields - streamlined with shorter timeouts
       const fields = [
         { input: this.firstNameInput, value: userData.firstName, name: 'First Name' },
         { input: this.lastNameInput, value: userData.lastName, name: 'Last Name' },
@@ -109,47 +104,41 @@ export class WebTablesPage {
           await field.input.waitFor({ state: 'visible', timeout: 3000 });
           await field.input.clear();
           await field.input.fill(field.value);
-          console.log(`✅ Filled ${field.name}: ${field.value}`);
+          console.log(` Filled ${field.name}: ${field.value}`);
         } catch (error) {
-          console.log(`⚠️ Could not fill ${field.name}, continuing...`);
+          console.log(` Could not fill ${field.name}, continuing...`);
         }
       }
       
-      // Submit form - simplified
       try {
         await this.submitButton.waitFor({ state: 'visible', timeout: 3000 });
         await this.submitButton.click();
-        console.log('📤 Form submitted');
+        console.log(' Form submitted');
       } catch {
-        // Try alternative button
         const submitButtons = await this.page.locator('button[type="submit"], .btn-primary').all();
         if (submitButtons.length > 0) {
           await submitButtons[0].click();
-          console.log('📤 Form submitted via fallback');
+          console.log(' Form submitted via fallback');
         }
       }
-      
-      // Wait for modal to close - reduced timeout
       try {
         await this.modalForm.waitFor({ state: 'hidden', timeout: 3000 });
-        console.log('🚪 Modal closed');
+        console.log(' Modal closed');
       } catch {
-        // Try to close manually if still open
         const closeButtons = await this.page.locator('.close, .btn-secondary, [aria-label="Close"]').all();
         if (closeButtons.length > 0) {
           await closeButtons[0].click();
         }
       }
       
-      // Reduced table update wait
       await this.page.waitForTimeout(1000);
       
-      console.log('✅ User addition completed');
+      console.log(' User addition completed');
       return true;
       
     } catch (error) {
-      console.log('⚠️ Add user had issues, continuing:', error);
-      // Try to close any open modals
+      console.log(' Add user had issues, continuing:', error);
+     
       try {
         const closeButtons = await this.page.locator('.close, .btn-secondary, [aria-label="Close"]').all();
         for (const btn of closeButtons) {
@@ -164,61 +153,54 @@ export class WebTablesPage {
   }
 
   async searchUser(searchTerm: string): Promise<boolean> {
-    console.log(`🔍 Searching for: "${searchTerm}"`);
+    console.log(` Searching for: "${searchTerm}"`);
     
     try {
-      // Reduced timeout for search box
       await this.searchBox.waitFor({ state: 'visible', timeout: 5000 });
       
-      // Simplified clearing - just use selectAll and delete
       await this.searchBox.click();
       await this.page.keyboard.press('Control+A');
       await this.page.keyboard.press('Delete');
       
-      // Type search term if provided
       if (searchTerm && searchTerm.trim() !== '') {
-        await this.searchBox.type(searchTerm, { delay: 50 }); // Reduced delay
+        await this.searchBox.type(searchTerm, { delay: 50 }); 
       }
       
-      // Reduced wait for search to take effect
-      await this.page.waitForTimeout(1000); // Reduced from 3000ms
+      await this.page.waitForTimeout(1000); 
       
-      console.log('✅ Search completed');
+      console.log(' Search completed');
       return true;
       
     } catch (error) {
-      console.log('⚠️ Search had issues, continuing:', error);
+      console.log(' Search had issues, continuing:', error);
       return true;
     }
   }
 
   async editUser(rowIndex: number, userData: Partial<UserData>): Promise<boolean> {
-    console.log(`✏️ Editing user at row ${rowIndex}`);
+    console.log(` Editing user at row ${rowIndex}`);
     
     try {
-      await this.page.waitForTimeout(500); // Reduced wait
+      await this.page.waitForTimeout(500);
       
-      // Simplified edit button finding
       const editButtons = await this.page.locator('[title="Edit"], .fa-edit, .rt-tbody button:first-child').all();
       
       if (editButtons.length === 0) {
-        console.log('⚠️ No edit button found');
+        console.log(' No edit button found');
         return true;
       }
       
       await editButtons[0].click();
-      console.log('✏️ Edit button clicked');
-      
-      // Wait for modal with reduced timeout
+      console.log(' Edit button clicked');
+  
       try {
         await this.modalForm.waitFor({ state: 'visible', timeout: 3000 });
         await this.page.waitForTimeout(500);
       } catch {
-        console.log('⚠️ Edit modal might not have opened');
+        console.log(' Edit modal might not have opened');
         return true;
       }
-      
-      // Fill fields quickly
+    
       if (userData.firstName) {
         try {
           await this.firstNameInput.clear();
@@ -238,7 +220,6 @@ export class WebTablesPage {
         } catch {}
       }
       
-      // Submit quickly
       try {
         await this.submitButton.click();
       } catch {
@@ -247,51 +228,47 @@ export class WebTablesPage {
           await submitBtns[0].click();
         }
       }
-      
-      // Reduced wait
       await this.page.waitForTimeout(1000);
       
-      console.log('✅ Edit completed');
+      console.log(' Edit completed');
       return true;
       
     } catch (error) {
-      console.log('⚠️ Edit had issues, continuing:', error);
+      console.log(' Edit had issues, continuing:', error);
       return true;
     }
   }
 
   async deleteUser(rowIndex: number): Promise<boolean> {
-    console.log(`🗑️ Deleting user at row ${rowIndex}`);
+    console.log(` Deleting user at row ${rowIndex}`);
     
     try {
-      await this.page.waitForTimeout(500); // Reduced wait
-      
-      // Simplified delete button finding
+      await this.page.waitForTimeout(500); 
       const deleteButtons = await this.page.locator('[title="Delete"], .fa-trash, .rt-tbody button:last-child').all();
       
       if (deleteButtons.length === 0) {
-        console.log('⚠️ No delete button found');
+        console.log(' No delete button found');
         return true;
       }
       
       await deleteButtons[0].click();
-      console.log('🗑️ Delete button clicked');
+      console.log(' Delete button clicked');
       
       // Reduced wait
       await this.page.waitForTimeout(1000);
       
-      console.log('✅ Delete completed');
+      console.log(' Delete completed');
       return true;
       
     } catch (error) {
-      console.log('⚠️ Delete had issues, continuing:', error);
+      console.log(' Delete had issues, continuing:', error);
       return true;
     }
   }
 
   async getActualDataRowCount(): Promise<number> {
     try {
-      await this.page.waitForTimeout(500); // Reduced wait
+      await this.page.waitForTimeout(500);
       
       // Simplified row counting
       const visibleRows = await this.page.locator('.rt-tbody .rt-tr-group').all();
@@ -304,44 +281,42 @@ export class WebTablesPage {
             contentRowCount++;
           }
         } catch {
-          // Skip problematic rows
+         
         }
       }
       
       if (contentRowCount > 0) {
-        console.log(`📊 Found ${contentRowCount} data rows`);
+        console.log(` Found ${contentRowCount} data rows`);
         return contentRowCount;
       }
-      
-      // Quick fallback check
+
       const tableContent = await this.userTable.textContent();
       const hasContent = tableContent && tableContent.trim().length > 200;
       
       if (hasContent) {
-        console.log(`📊 Table has content, assuming default rows`);
+        console.log(` Table has content, assuming default rows`);
         return 3;
       }
       
-      console.log(`📊 No data rows detected`);
+      console.log(` No data rows detected`);
       return 0;
       
     } catch (error) {
-      console.log('⚠️ Row counting had issues:', error);
+      console.log(' Row counting had issues:', error);
       return 0;
     }
   }
 
   async verifyUserInTable(userData: Partial<UserData>): Promise<boolean> {
     try {
-      await this.page.waitForTimeout(500); // Reduced wait
+      await this.page.waitForTimeout(500); 
       
       const tableContent = await this.userTable.textContent();
       if (!tableContent) {
-        console.log('❌ No table content');
+        console.log(' No table content');
         return false;
       }
-      
-      // Quick search term building
+   
       const searchTerms = [
         userData.firstName,
         userData.lastName,
@@ -351,53 +326,50 @@ export class WebTablesPage {
       ].filter(term => term && term.trim() !== '');
       
       if (searchTerms.length === 0) {
-        console.log('❌ No search terms');
+        console.log(' No search terms');
         return false;
       }
-      
-      // Quick search
+
       const found = searchTerms.some(term => {
         const termFound = tableContent.toLowerCase().includes(term!.toLowerCase());
         if (termFound) {
-          console.log(`✅ Found: ${term}`);
+          console.log(` Found: ${term}`);
         }
         return termFound;
       });
       
-      console.log(`🔍 User ${found ? 'FOUND' : 'NOT FOUND'}`);
+      console.log(` User ${found ? 'FOUND' : 'NOT FOUND'}`);
       return found;
       
     } catch (error) {
-      console.log('⚠️ Verification had issues:', error);
+      console.log(' Verification had issues:', error);
       return false;
     }
   }
 
   async waitForTableUpdate() {
-    console.log('⏳ Waiting for table update...');
+    console.log(' Waiting for table update...');
     
-    // Much faster wait strategy
-    await this.page.waitForTimeout(1000); // Reduced from 4000ms
-    
-    // Quick loading check
+
+    await this.page.waitForTimeout(1000); 
+ 
     try {
       await this.page.waitForFunction(() => {
         const loadingElements = document.querySelectorAll('.loading, .spinner, [class*="loading"]');
         return loadingElements.length === 0;
-      }, { timeout: 2000 }); // Reduced timeout
+      }, { timeout: 2000 }); 
     } catch {
-      // Continue if no loading indicators
+     
     }
     
-    // Final quick wait
-    await this.page.waitForTimeout(500); // Reduced from 2000ms
+    await this.page.waitForTimeout(500); 
     
-    console.log('✅ Table update wait completed');
+    console.log('Table update wait completed');
   }
 
   async isNoDataVisible(): Promise<boolean> {
     try {
-      // Quick check for no-data messages
+
       const noDataSelectors = [
         'text=No rows found',
         'text=No data available',
@@ -414,8 +386,7 @@ export class WebTablesPage {
           continue;
         }
       }
-      
-      // Quick content check
+
       const tableContent = await this.userTable.textContent();
       const isEmpty = !tableContent || tableContent.trim().length < 150;
       
@@ -427,18 +398,17 @@ export class WebTablesPage {
       return false;
       
     } catch (error) {
-      console.log('⚠️ No data check had issues:', error);
+      console.log(' No data check had issues:', error);
       return false;
     }
   }
 
-  // Simplified stability check
   async ensurePageStability(): Promise<void> {
     try {
       await this.page.waitForLoadState('domcontentloaded');
-      await this.page.waitForTimeout(500); // Much reduced
+      await this.page.waitForTimeout(500);
       
-      // Quick check for critical elements
+     
       await Promise.all([
         this.addButton.waitFor({ state: 'attached', timeout: 2000 }).catch(() => {}),
         this.searchBox.waitFor({ state: 'attached', timeout: 2000 }).catch(() => {}),
@@ -446,7 +416,7 @@ export class WebTablesPage {
       ]);
       
     } catch (error) {
-      console.log('⚠️ Stability check had issues:', error);
+      console.log(' Stability check had issues:', error);
     }
   }
 }
