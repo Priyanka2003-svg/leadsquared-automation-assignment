@@ -12,10 +12,10 @@ This project contains end-to-end tests using Playwright with TypeScript for web 
 
 ## Test Scenarios Covered
 
-- ✅ Login workflow with screenshot capture
-- ✅ User CRUD operations (Create, Read, Update, Delete)
-- ✅ Search and filter functionality
-- ✅ UI validation after each operation
+-  Login workflow with screenshot capture
+-  User CRUD operations (Create, Read, Update, Delete)
+-  Search and filter functionality
+-  UI validation after each operation
 
 ## Architecture
 
