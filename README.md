@@ -1,4 +1,4 @@
-# LeadSquared Automation Engineer Assignment
+
 
 ## Overview
 This project contains end-to-end tests using Playwright with TypeScript for web application testing.
